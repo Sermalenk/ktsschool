@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Новый чат{% endblock %}
+{% block content %}
+    <div class="chat">
+        {% for m in messages  %}
+            {% include "core/message.html" with message=m %}
+        {% endfor %}
+    </div>
+    <div class="input">
+        <div class="input__attach btn"></div>
+        <input type="text" value="" placeholder="Введите сообщение"/>
+        <div class="input__send btn"></div>
+    </div>
+{% endblock %}
