@@ -4,8 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static "core/example.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "core/css/bootstrap.min.css" %}">
+    <script type="text/javascript" src="{% static "core/js/bootstrap.min.js" %}"></script>
+
+    {% block extrastyles %}{% endblock %}
+    {% block extrascripts %}{% endblock %}
 </head>
 <body>
     {% block content %}{% endblock %}
