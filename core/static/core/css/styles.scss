@@ -13,6 +13,9 @@ html, body {
     padding: 20px;
     box-sizing: border-box;
     overflow: auto;
+
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .message {
@@ -20,40 +23,36 @@ html, body {
     background: white;
     font-size: 12px;
     transition: background 0.2s linear;
-}
 
-.message__author {
-    margin-bottom: 10px;
-}
+    &__author {
+        margin-bottom: 10px;
+    }
 
-.message__avatar {
-    display: inline-block;
-    margin-right: 10px;
-    border-radius: 50%;
-    background: url('avatar.png') no-repeat center;
-    background-size: cover;
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-}
+    &__avatar {
+        display: inline-block;
+        margin-right: 10px;
+        border-radius: 50%;
+        background: url('../img/avatar.png') no-repeat center;
+        background-size: cover;
+        width: 30px;
+        height: 30px;
+        vertical-align: middle;
+    }
 
-.message__time {
-    float: right;
-    color: #b2b2b2;
-    line-height: 30px;
-}
+    &__time {
+        float: right;
+        color: #b2b2b2;
+        line-height: 30px;
+    }
 
-.message__text {
+    &__name {
+        vertical-align: middle;
+        display: inline-block;
+    }
 
-}
-
-.message__name {
-    vertical-align: middle;
-    display: inline-block;
-}
-
-.message:hover {
-    background: #f1f1f1;
+    &:hover {
+        background: #f1f1f1;
+    }
 }
 
 .input {
@@ -67,7 +66,7 @@ html, body {
     width: 30px;
     height: 30px;
     vertical-align: middle;
-    background: url('attach.ico') no-repeat center;
+    background: url('../img/attach.ico') no-repeat center;
     background-size: contain;
     margin-right: 10px;
 }
@@ -83,7 +82,7 @@ input {
     vertical-align: middle;
     width: 20px;
     height: 20px;
-    background: url('send.png') no-repeat center;
+    background: url('../img/send.png') no-repeat center;
     background-size: contain;
     margin-left: 10px;
 }

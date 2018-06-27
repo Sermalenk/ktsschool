@@ -25,7 +25,7 @@ SECRET_KEY = '+83ik0w05o7x+od23x&r981(^h9tzou4k-=6^rf#^ui#de)!ku'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'webpack_loader'
 ]
 
 PROJECT_APPS = [
@@ -75,6 +76,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chat.wsgi.application'
 
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'bundle/', # must end with slash
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'IGNORE': ['.+\.hot-update.js', '.+\.map']
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -125,3 +136,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_URL = '/chat/pretty_login/'
+
+PROXY_BASE_URL = 'http://127.0.0.1:8080/assets/bundles'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'assets'),
+)

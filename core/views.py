@@ -1,8 +1,11 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.core.serializers import serialize
 from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView, CreateView
@@ -16,7 +19,31 @@ class ChatView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        messages = Message.objects.all().order_by('-id')
+
+        last_id = self.request.GET.get('last_id')
+
+        if last_id:
+            messages = Message.objects.filter(id__gt=last_id).order_by('-id')[:20]
+        else:
+            messages = Message.objects.all().order_by('-id')
+
+        data['messages'] = messages
+        return data
+
+
+class MessagesView(LoginRequiredMixin, TemplateView):
+    template_name = 'core/messages.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        last_id = self.request.GET.get('last_id')
+
+        if last_id:
+            messages = Message.objects.filter(id__gt=last_id).order_by('-id')
+        else:
+            messages = Message.objects.all().order_by('-id')
+
         data['messages'] = messages
         return data
 
@@ -65,6 +92,20 @@ class MessageCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('core:chat_get')
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        return JsonResponse({
+            'id': self.object.id,
+            'text': self.object.text,
+            'author': self.object.author.username,
+            'time': self.object.date,
+            'renderedTemplate': render_to_string(
+                'core/message.html',
+                {'message': self.object},
+                self.request
+            )
+        })
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

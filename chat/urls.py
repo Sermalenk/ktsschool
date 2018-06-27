@@ -16,11 +16,26 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf.urls.static import static
 from django.urls import path
+from django.urls import re_path
+
+from chat import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^chat/', include(('core.urls', 'core'))),
 ]
 
-urlpatterns += staticfiles_urlpatterns()
+if settings.DEBUG:
+    from revproxy.views import ProxyView
+
+
+    class AssetsProxyView(ProxyView):
+        upstream = settings.PROXY_BASE_URL
+
+
+    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += [
+        re_path(r'assets/bundles/(?P<path>.*)$', AssetsProxyView.as_view()),
+    ]

@@ -1,18 +1,22 @@
 {% extends "base.html" %}
 {% load static %}
+{% load render_bundle from webpack_loader %}
 {% block extrastyles %}
-    <link rel="stylesheet" type="text/css" href="{% static "core/example.css" %}">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    {% render_bundle 'main' 'css' %}
 {% endblock %}
+
+{% block extrascripts %}
+    {% render_bundle 'main' 'js' %}
+{% endblock %}
+
 {% block title %}Новый чат{% endblock %}
 {% block content %}
-    <div class="">{{ user.username }}</div>
-    <div class="chat">
+    <div class="chat" id="chat">
         {% for m in messages %}
             {% include "core/message.html" with message=m %}
         {% endfor %}
     </div>
-    <form class="input" action="{% url "core:message_create" %}" method="post">
+    <form class="input message-form" id="message-form" action="{% url "core:message_create" %}" method="post">
         {% csrf_token %}
         <div class="input__attach btn"></div>
         <input type="text" value="" name="text" placeholder="Введите сообщение"/>
